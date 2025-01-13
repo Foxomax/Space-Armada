@@ -5,10 +5,13 @@ use sprite::*;
 // 130 x 103
 
 pub fn get_sprite(
-    x: u32,
-    y: u32,
-    width: u32,
-    height: u32,
+    sprite_x: f32,
+    sprite_y: f32,
+    width: f32,
+    height: f32,
+    x: f64,
+    y: f64,
+    scale_factor: f64,
     window: &mut PistonWindow,
 ) -> Sprite<piston_window::Texture<gfx_device_gl::Resources>> {
     let sprites = find_folder::Search::ParentsThenKids(0, 0)
@@ -30,9 +33,20 @@ pub fn get_sprite(
         )
         .unwrap(),
     );
-    let mut sprite = Sprite::from_texture(tex);
+
+    let mut sprite = Sprite::from_texture_rect(
+        tex,
+        [
+            sprite_x as f64,
+            sprite_y as f64,
+            width as f64,
+            height as f64,
+        ],
+    );
+
     sprite.set_position(x as f64, y as f64);
-    sprite.set_anchor(width as f64, height as f64);
+    sprite.set_anchor(0.5 as f64, 0.5 as f64);
+    sprite.set_scale(scale_factor, scale_factor);
     // return the sprite
     sprite
 }
